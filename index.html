@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charrúa Sport</title>
+<!-- Open Graph: vista previa al compartir en WhatsApp / redes -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Charrúa Sport">
+<meta property="og:title" content="Charrúa Sport">
+<meta property="og:description" content="Perfiles profesionales de jugadores: datos, estadísticas, trayectoria y highlights en video.">
+<meta property="og:url" content="https://charruasport.netlify.app/">
+<meta property="og:image" content="https://charruasport.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Charrúa Sport">
+<meta name="twitter:description" content="Perfiles profesionales de jugadores: datos, estadísticas, trayectoria y highlights en video.">
+<meta name="twitter:image" content="https://charruasport.netlify.app/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --bg: #050505;
+  --surface: #0e0e0e;
+  --surface2: #161616;
+  --border: #2a2a2a;
+  --accent: #8a8a8a;
+  --accent-light: #c4c4c4;
+  --accent-glow: rgba(196,196,196,0.25);
+  --gold: #c9a227;
+  --text: #f0f0f0;
+  --muted: #6a6a6a;
+  --muted2: #9a9a9a;
+  --danger: #e05252;
+  --success: #3dba7e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── SPLASH ─── */
+#splash {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 30%, rgba(196,196,196,0.10) 0%, transparent 70%),
+              linear-gradient(180deg, #080c12 0%, #0b1219 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+#splash::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c4c4c4' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.splash-logo-wrap {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  animation: fadeUp 0.8s ease both;
+}
+
+.splash-logo-wrap img {
+  width: 220px;
+  filter: brightness(0) invert(1);
+  margin-bottom: 8px;
+}
+
+.splash-tagline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 60px;
+}
+
+.splash-divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+  margin: 0 auto 60px;
+}
+
+.splash-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 280px;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.splash-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.splash-btn:hover {
+  background: var(--surface2);
+  border-color: var(--accent);
+  transform: translateX(4px);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.splash-btn-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.splash-btn-text strong {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.splash-btn-text span {
+  font-size: 11px;
+  color: var(--muted2);
+}
+
+/* ─── MAIN APP ─── */
+#app { display: none; flex-direction: column; min-height: 100vh; }
+
+/* ─── TOPBAR ─── */
+.topbar {
+  background: rgba(8,12,18,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar img {
+  height: 28px;
+  filter: brightness(0) invert(1);
+  cursor: pointer;
+}
+
+.topbar-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--accent-light);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+}
+
+/* ─── SECTIONS ─── */
+.section { display: none; padding: 16px; max-width: 600px; margin: 0 auto; width: 100%; }
+.section.active { display: block; }
+
+/* ─── SECTION HEADER ─── */
+.section-header {
+  margin-bottom: 20px;
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+}
+
+.section-header h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.section-header p {
+  font-size: 12px;
+  color: var(--muted2);
+  margin-top: 2px;
+}
+
+/* ─── PLAYER GRID ─── */
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.player-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.player-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--accent-glow);
+}
+
+.player-card-img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-position: top;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.player-card-img-placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--surface) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.player-card-info {
+  padding: 10px 12px 12px;
+}
+
+.player-card-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.player-card-pos {
+  font-size: 11px;
+  color: var(--accent-light);
+  margin-top: 3px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.player-card-club {
+  font-size: 11px;
+  color: var(--muted2);
+  margin-top: 2px;
+}
+
+/* ─── FICHA ─── */
+#section-ficha { padding-bottom: 40px; }
+
+.ficha-hero {
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--surface) 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.ficha-hero-top {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+.ficha-photo {
+  width: 110px;
+  height: 140px;
+  border-radius: 10px;
+  object-fit: cover;
+  object-position: top;
+  background: var(--surface);
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+}
+
+.ficha-photo-placeholder {
+  width: 110px;
+  height: 140px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.ficha-basic {
+  flex: 1;
+  min-width: 0;
+}
+
+.ficha-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.ficha-pos-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin: 6px 0;
+}
+
+.ficha-club {
+  font-size: 13px;
+  color: var(--muted2);
+  margin-bottom: 10px;
+}
+
+.ficha-market {
+  background: rgba(201,162,39,0.1);
+  border: 1px solid rgba(201,162,39,0.3);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: inline-block;
+}
+
+.ficha-market-label {
+  font-size: 9px;
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ficha-market-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.1;
+}
+
+/* ─── DATA TABLE ─── */
+.data-table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.data-table-title {
+  padding: 10px 14px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-row:last-child { border-bottom: none; }
+
+.data-label {
+  font-size: 12px;
+  color: var(--muted2);
+}
+
+.data-val {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  text-align: right;
+  max-width: 60%;
+}
+
+/* ─── STATS ─── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.stat-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent-light);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--muted2);
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+}
+
+/* ─── TRAYECTORIA ─── */
+.trayectoria-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.trayectoria-item:last-child { border-bottom: none; }
+
+.tray-years {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent-light);
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.tray-club {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tray-liga {
+  font-size: 11px;
+  color: var(--muted2);
+  margin-top: 2px;
+}
+
+/* ─── BIO ─── */
+.bio-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted2);
+}
+
+/* ─── HIGHLIGHTS ─── */
+.video-embed {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.video-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.video-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px dashed var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.video-placeholder span { font-size: 32px; }
+
+/* ─── SHARE BTN ─── */
+.share-btn {
+  width: 100%;
+  padding: 14px;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  transition: opacity 0.2s;
+}
+
+.share-btn:hover { opacity: 0.9; }
+
+.pdf-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  transition: all 0.2s;
+}
+
+.pdf-btn:hover { background: var(--accent); }
+.pdf-btn:disabled { opacity: 0.6; cursor: wait; }
+
+/* Used only for PDF export rendering - hidden from normal view */
+#pdf-export-area {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 480px;
+  background: var(--bg);
+  padding: 24px;
+}
+
+/* ─── SELECCIÓN BADGE ─── */
+.seleccion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(61,186,126,0.1);
+  border: 1px solid rgba(61,186,126,0.3);
+  color: var(--success);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ─── NOTICIAS ─── */
+.news-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.news-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.news-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.news-body {
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.6;
+}
+
+/* ─── QUIENES SOMOS ─── */
+.about-header {
+  text-align: center;
+  padding: 24px 0 20px;
+}
+
+.about-logo {
+  width: 160px;
+  filter: brightness(0) invert(1);
+  margin-bottom: 16px;
+}
+
+.about-desc {
+  font-size: 14px;
+  color: var(--muted2);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.about-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.about-block-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-block-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted2);
+}
+
+.about-founders {
+  display: inline-block;
+  color: var(--accent-light);
+  font-weight: 600;
+}
+
+.players-history-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.player-history-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+.player-history-flag { font-size: 14px; flex-shrink: 0; }
+
+.players-history-more {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.clubs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.club-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.clubs-footnote {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+.philosophy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.philosophy-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.5;
+}
+
+.philosophy-item span:first-child { font-size: 16px; flex-shrink: 0; }
+
+.about-quote {
+  text-align: center;
+  padding: 22px 16px;
+  background: linear-gradient(135deg, rgba(196,196,196,0.10) 0%, rgba(196,196,196,0.02) 100%);
+  border: 1px solid rgba(196,196,196,0.25);
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.about-quote p {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--accent-light);
+  letter-spacing: 0.01em;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.contact-link:hover { border-color: var(--accent); }
+
+.contact-icon {
+  font-size: 20px;
+  width: 36px;
+  text-align: center;
+}
+
+.contact-info strong {
+  display: block;
+  font-size: 14px;
+}
+
+.contact-info span {
+  font-size: 12px;
+  color: var(--muted2);
+}
+
+/* ─── ADMIN PANEL ─── */
+#admin-login {
+  display: none;
+  min-height: 100vh;
+  background: var(--bg);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+#admin-panel {
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.admin-bar {
+  background: var(--surface2);
+  border-bottom: 2px solid var(--accent);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-bar-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+
+.admin-exit-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.admin-content {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ─── FORM ─── */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted2);
+  margin-bottom: 5px;
+}
+
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--accent);
+}
+
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 6px;
+}
+
+.btn-primary:hover { background: var(--accent-light); }
+
+.btn-danger {
+  background: none;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover { background: var(--danger); color: white; }
+
+.admin-player-list {
+  margin-top: 20px;
+}
+
+.admin-player-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.admin-player-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.admin-player-meta {
+  font-size: 11px;
+  color: var(--muted2);
+  margin-top: 2px;
+}
+
+.admin-btn-group { display: flex; gap: 8px; }
+
+.btn-edit {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-edit:hover { border-color: var(--accent); color: var(--accent-light); }
+
+.tabs {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 16px;
+  gap: 4px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: var(--muted2);
+  font-size: 12px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: white;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ─── STATS INPUT GROUP ─── */
+.stats-input-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+
+.stats-input-group-title {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+/* ─── LOGIN CARD ─── */
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.login-card h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.login-card p {
+  font-size: 12px;
+  color: var(--muted2);
+  margin-bottom: 20px;
+}
+
+.login-error {
+  background: rgba(224,82,82,0.1);
+  border: 1px solid rgba(224,82,82,0.3);
+  color: var(--danger);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  margin-bottom: 12px;
+  display: none;
+}
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--success);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: transform 0.3s;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── EMPTY STATE ─── */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+}
+
+.empty-state span { font-size: 40px; display: block; margin-bottom: 10px; }
+.empty-state p { font-size: 14px; }
+
+/* ─── CHECKBOX ─── */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.checkbox-group input[type=checkbox] {
+  width: 16px; height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.checkbox-group label {
+  font-size: 13px;
+  color: var(--muted2);
+  cursor: pointer;
+}
+
+.admin-section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Selector de temporada en la ficha */
+.season-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--accent);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%227%22><path d=%22M1 1l5 5 5-5%22 stroke=%22white%22 stroke-width=%222%22 fill=%22none%22/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--accent-light);
+  border-radius: 8px;
+  padding: 6px 32px 6px 14px;
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+.season-select:hover { background-color: var(--accent-light); }
+.season-select option { background: var(--surface2); color: var(--text); font-weight: 700; }
+.season-single {
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--accent);
+  border-radius: 8px;
+  padding: 5px 14px;
+}
+
+/* ─── RESPONSIVE ─── */
+#api-search-results { max-height: 340px; overflow-y: auto; }
+/* Tablets y pantallas medianas */
+@media (min-width: 768px) {
+  .section { max-width: 900px; padding: 24px 32px; }
+  #section-noticias, #section-quienes { max-width: 700px; }
+  .players-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .topbar { padding-left: 32px; padding-right: 32px; }
+
+  /* Ficha amplia en PC */
+  #section-ficha { max-width: 900px; }
+  .ficha-hero-top { gap: 28px; padding: 28px; }
+  .ficha-photo, .ficha-photo-placeholder { width: 180px; height: 230px; }
+  .ficha-name { font-size: 44px; }
+  .ficha-pos-badge { font-size: 12px; padding: 4px 12px; }
+  .ficha-club { font-size: 16px; }
+  .ficha-market { padding: 10px 16px; }
+  .ficha-market-val { font-size: 26px; }
+  .stat-val { font-size: 34px; }
+  .data-row { padding: 12px 18px; }
+  .data-label, .data-val { font-size: 15px; }
+  .bio-text { font-size: 15px; line-height: 1.7; }
+
+  /* Datos personales y estadísticas lado a lado */
+  .ficha-tables-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+    align-items: start;
+    margin-bottom: 14px;
+  }
+  .ficha-tables-wrap .data-table { margin-bottom: 0; }
+}
+
+/* Escritorio grande */
+@media (min-width: 1100px) {
+  .section { max-width: 1080px; }
+  .players-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  #section-ficha { max-width: 980px; }
+}
+
+/* Celulares chicos */
+@media (max-width: 380px) {
+  .players-grid { gap: 10px; }
+  .ficha-name { font-size: 22px; }
+  .stat-val { font-size: 20px; }
+  .ficha-hero-top { flex-wrap: wrap; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo-wrap">
+    <img src="logo.png" alt="Charrúa Sport" id="splash-img">
+    <div class="splash-tagline">Player Management Agency</div>
+    <div class="splash-divider"></div>
+  </div>
+  <nav class="splash-nav">
+    <button class="splash-btn" onclick="showSection('jugadores')">
+      <div class="splash-btn-icon">⚽</div>
+      <div class="splash-btn-text">
+        <strong>Jugadores</strong>
+        <span>Fichas y perfiles</span>
+      </div>
+    </button>
+    <button class="splash-btn" onclick="showSection('noticias')">
+      <div class="splash-btn-icon">📰</div>
+      <div class="splash-btn-text">
+        <strong>Noticias</strong>
+        <span>Últimas novedades</span>
+      </div>
+    </button>
+    <button class="splash-btn" onclick="showSection('quienes')">
+      <div class="splash-btn-icon">🏢</div>
+      <div class="splash-btn-text">
+        <strong>Quiénes somos</strong>
+        <span>La agencia</span>
+      </div>
+    </button>
+  </nav>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">← Inicio</button>
+    <div class="topbar-title" id="topbar-title">Jugadores</div>
+    <div style="width:60px"></div>
+  </div>
+
+  <!-- JUGADORES -->
+  <div class="section active" id="section-jugadores">
+    <div class="section-header">
+      <h2>Jugadores</h2>
+      <p id="player-count-label">Cargando...</p>
+    </div>
+    <div class="players-grid" id="players-grid"></div>
+  </div>
+
+  <!-- FICHA -->
+  <div class="section" id="section-ficha"></div>
+
+  <!-- NOTICIAS -->
+  <div class="section" id="section-noticias">
+    <div class="section-header">
+      <h2>Noticias</h2>
+      <p>Últimas novedades de la agencia</p>
+    </div>
+    <div id="news-container"></div>
+  </div>
+
+  <!-- QUIENES SOMOS -->
+  <div class="section" id="section-quienes">
+    <div class="about-header">
+      <img src="logo.png" alt="Charrúa Sport" class="about-logo">
+      <h2 style="font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">Charrúa Sport</h2>
+      <p class="about-desc">⚽ Representación e intermediación de futbolistas y entrenadores</p>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-text">
+<span class="about-founders">CHARRÚA SPORT</span> es una empresa uruguaya dedicada a la representación de futbolistas y al desarrollo integral de sus carreras. Acompañamos a cada jugador a lo largo de toda su trayectoria, ocupándonos de todo lo que necesita dentro y fuera de la cancha.
+        <br><br>
+        Ofrecemos lo mejor en producción de videos, análisis estadístico y armado de perfiles profesionales, con el objetivo de potenciar la imagen y proyección de cada futbolista. Nuestro compromiso es brindar un servicio cercano, personalizado y de máxima calidad, para que el jugador se concentre en lo único que importa: rendir en el campo de juego.
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">🎯 Objetivo</div>
+      <div class="about-block-text">
+        Ponemos especial atención en mantener un trato personalizado, humano y respetuoso con nuestros profesionales. Priorizamos mejorar sus aptitudes mediante un completo apoyo en traspasos, marketing, asesoramiento legal y planificación de carrera, siempre dentro de una total transparencia de procedimientos, tanto para nuestros representados como para todas las partes intervinientes en cada operación.
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">👥 Dirección</div>
+      <div class="about-block-text">
+        Charrúa Sport está dirigida por <span class="about-founders">Vonder Putten</span> y <span class="about-founders">Miguel Lavié</span>, quienes lideran el proyecto con una visión centrada en el desarrollo y crecimiento de cada futbolista.
+        <br><br>
+        Con experiencia y una amplia red de contactos en el fútbol, se dedican a la representación de jugadores y al acompañamiento profesional a lo largo de toda su carrera, garantizando un trato humano, transparente y comprometido con los intereses de sus representados.
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">🛠 Servicios</div>
+      <div class="philosophy-list">
+        <div class="philosophy-item"><span>🤝</span><span>Representación</span></div>
+        <div class="philosophy-item"><span>⚽</span><span>Asesoría deportiva</span></div>
+        <div class="philosophy-item"><span>⚖️</span><span>Asesoría jurídica</span></div>
+        <div class="philosophy-item"><span>📄</span><span>Asesoría laboral</span></div>
+        <div class="philosophy-item"><span>💰</span><span>Asesoría fiscal</span></div>
+        <div class="philosophy-item"><span>🗂</span><span>Administración</span></div>
+        <div class="philosophy-item"><span>🩺</span><span>Asesoría médica</span></div>
+        <div class="philosophy-item"><span>🛡</span><span>Cobertura de servicios integrales</span></div>
+        <div class="philosophy-item"><span>📣</span><span>Comunicación</span></div>
+        <div class="philosophy-item"><span>📸</span><span>Imagen</span></div>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">🔍 Captación de jugadores</div>
+      <div class="about-block-text">
+        Contamos con un equipo de trabajo de excelente percepción para la identificación de futuros talentos.
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">🤝 Representación de futbolistas</div>
+      <div class="about-block-text">
+        Brindamos un servicio integral y personalizado para la gestión de la carrera del futbolista, con el fin de que se concentre exclusivamente en su función deportiva y en su rendimiento en el campo de juego.
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">🌎 Búsqueda de clubes para jugadores</div>
+      <div class="about-block-text">
+        <span class="about-founders">CHARRÚA SPORT</span> posee una amplia y calificada red de contactos locales y en el exterior, uniendo un calificado equipo con los conocimientos necesarios para lograr acuerdos que garanticen las mejores condiciones contractuales para todas las partes interesadas.
+        <br><br>
+        La intermediación no consiste simplemente en ofrecer jugadores: como paso previo se realiza un pormenorizado análisis del país de destino, formas de juego, nivel de vida, estudios de mercado y adecuación a los sistemas de los entrenadores de turno. Para minimizar errores, este trabajo se complementa con el uso exclusivo de una plataforma web internacional que brinda acceso a todos los partidos que se disputan en las diferentes ligas y mercados del mundo.
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">⚖️ Asesoramiento financiero y legal</div>
+      <div class="about-block-text">
+        Contamos con el asesoramiento de un calificado staff de profesionales en todas las áreas jurídicas, contables, administrativas, legales y financieras, velando constantemente por la seguridad de nuestros futbolistas.
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-block-title">📣 Marketing y planificación de carrera</div>
+      <div class="about-block-text">
+        Gestión y promoción de la imagen del futbolista profesional en sus propios canales de comunicación (página web, redes sociales, aplicaciones móviles) y marketing deportivo. Nos ocupamos personalmente de construir una imagen personal apropiada, tendiente a incrementar el reconocimiento de su carrera deportiva, y apoyamos la búsqueda de las mejores oportunidades comerciales para lograr ingresos adicionales.
+      </div>
+    </div>
+    <a href="https://wa.me/598XXXXXXXX" class="contact-link" target="_blank">
+      <div class="contact-icon">📱</div>
+      <div class="contact-info">
+        <strong>WhatsApp</strong>
+        <span>Contacto directo</span>
+      </div>
+    </a>
+    <a href="mailto:info@charruasport.com" class="contact-link">
+      <div class="contact-icon">✉️</div>
+      <div class="contact-info">
+        <strong>Email</strong>
+        <span>info@charruasport.com</span>
+      </div>
+    </a>
+    <a href="https://www.instagram.com/charruasport" class="contact-link" target="_blank">
+      <div class="contact-icon">📸</div>
+      <div class="contact-info">
+        <strong>Instagram</strong>
+        <span>@charruasport</span>
+      </div>
+    </a>
+    <a href="https://www.facebook.com/charruasport" class="contact-link" target="_blank">
+      <div class="contact-icon">👍</div>
+      <div class="contact-info">
+        <strong>Facebook</strong>
+        <span>Charrúa Sport</span>
+      </div>
+    </a>
+    <div style="text-align:center; padding:24px 0 8px;">
+      <button onclick="showAdmin()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;letter-spacing:0.06em;">⚙ Panel de administración</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="admin-login" style="display:none; min-height:100vh; align-items:center; justify-content:center; padding:20px; background:var(--bg);">
+  <div class="login-card">
+    <h2>Admin</h2>
+    <p>Acceso restringido · Charrúa Sport</p>
+    <div class="login-error" id="login-error">Contraseña incorrecta</div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input type="password" class="form-input" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Ingresar</button>
+    <div style="text-align:center; margin-top:14px;">
+      <button onclick="hideAdmin()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;">← Volver</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel" style="display:none; flex-direction:column; min-height:100vh; background:var(--bg);">
+  <div class="admin-bar">
+    <div class="admin-bar-title">⚙ Panel Admin</div>
+    <button class="admin-exit-btn" onclick="hideAdmin()">Salir</button>
+  </div>
+  <div class="admin-content">
+    <div class="tabs">
+      <button class="tab active" onclick="switchAdminTab('agregar', this)">+ Agregar</button>
+      <button class="tab" onclick="switchAdminTab('jugadores', this)">Jugadores</button>
+      <button class="tab" onclick="switchAdminTab('noticias-admin', this)">Noticias</button>
+    </div>
+
+    <!-- TAB: AGREGAR JUGADOR -->
+    <div class="tab-content active" id="tab-agregar">
+      <div class="admin-section-title">Nuevo Jugador</div>
+      <input type="hidden" id="edit-id">
+
+      <div class="form-group">
+        <label class="form-label">Nombre completo *</label>
+        <input type="text" class="form-input" id="f-nombre" placeholder="Ej: Federico Viñas">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Posición *</label>
+          <select class="form-select" id="f-posicion">
+            <option value="">Seleccionar</option>
+            <option>Portero</option>
+            <option>Defensa Central</option>
+            <option>Lateral Derecho</option>
+            <option>Lateral Izquierdo</option>
+            <option>Mediocampista Defensivo</option>
+            <option>Mediocampista Central</option>
+            <option>Mediocampista Ofensivo</option>
+            <option>Extremo Derecho</option>
+            <option>Extremo Izquierdo</option>
+            <option>Delantero Centro</option>
+            <option>Segundo Delantero</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha de nac.</label>
+          <input type="text" class="form-input" id="f-nacimiento" placeholder="DD/MM/AAAA">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Club actual *</label>
+          <input type="text" class="form-input" id="f-club" placeholder="Ej: Nacional">
+        </div>
+        <div class="form-group">
+          <label class="form-label">País</label>
+          <input type="text" class="form-input" id="f-pais" placeholder="Ej: Uruguay">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nacionalidad</label>
+          <input type="text" class="form-input" id="f-nacionalidad" placeholder="Ej: Uruguayo">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Altura</label>
+          <input type="text" class="form-input" id="f-altura" placeholder="Ej: 1.82m">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Valor de mercado (Transfermarkt)</label>
+        <input type="text" class="form-input" id="f-valor" placeholder="Ej: €1.5M">
+      </div>
+
+      <div class="stats-input-group">
+        <div class="stats-input-group-title">Estadísticas automáticas (API-Football)</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ID API-Football</label>
+            <input type="text" class="form-input" id="f-apiid" placeholder="Se completa al vincular">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Buscar por apellido</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" class="form-input" id="f-api-search" placeholder="Ej: Correa" onkeydown="if(event.key==='Enter'){event.preventDefault();searchApiPlayer()}">
+              <input type="text" class="form-input" id="f-api-pais" placeholder="País (opcional)" style="max-width:130px;" onkeydown="if(event.key==='Enter'){event.preventDefault();searchApiPlayer()}">
+              <input type="text" class="form-input" id="f-api-anio" placeholder="Año nac." style="max-width:90px;" onkeydown="if(event.key==='Enter'){event.preventDefault();searchApiPlayer()}">
+              <button type="button" class="btn-primary" style="width:auto;padding:0 16px;flex-shrink:0;" onclick="searchApiPlayer()">🔍</button>
+            </div>
+          </div>
+        </div>
+        <div id="api-search-results"></div>
+        <div class="form-group" style="margin-top:10px;">
+          <label class="form-label">Temporada a consultar</label>
+          <select class="form-input" id="f-apiseason">
+            <option value="">Automática (actual, y si no hay datos, la anterior)</option>
+          </select>
+        </div>
+        <div class="form-row" style="margin-top:10px;">
+          <div class="form-group">
+            <label class="form-label">Fuente de estadísticas</label>
+            <select class="form-input" id="f-source">
+              <option value="">API-Football (por defecto)</option>
+              <option value="fotmob">FotMob</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ID FotMob (si elegiste FotMob)</label>
+            <input type="text" class="form-input" id="f-fotmob" placeholder="Ej: 1204561">
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:10px;">
+          <label class="form-label">ID SofaScore (muestra el widget de análisis en la ficha)</label>
+          <input type="text" class="form-input" id="f-sofascore" placeholder="Ej: 1650446">
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:6px;">Si el jugador queda vinculado, sus partidos, goles, asistencias y demás stats se actualizan solos lunes y viernes. Las temporadas tipo 2025/2026 son las europeas. El ID de FotMob está en la URL del jugador: fotmob.com/es/players/<b>1204561</b>/nombre. El de SofaScore está en la URL del jugador o en su código embed: sofascore.com/es/jugador/nombre/<b>1650446</b>.</p>
+      </div>
+
+      <div class="stats-input-group">
+        <div class="stats-input-group-title">Estadísticas principales (temporada actual)</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Etiqueta stat 1</label>
+            <input type="text" class="form-input" id="f-stat1-label" placeholder="Ej: Goles">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valor stat 1</label>
+            <input type="text" class="form-input" id="f-stat1-val" placeholder="Ej: 12">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Etiqueta stat 2</label>
+            <input type="text" class="form-input" id="f-stat2-label" placeholder="Ej: Asistencias">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valor stat 2</label>
+            <input type="text" class="form-input" id="f-stat2-val" placeholder="Ej: 7">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Etiqueta stat 3</label>
+            <input type="text" class="form-input" id="f-stat3-label" placeholder="Ej: Partidos">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valor stat 3</label>
+            <input type="text" class="form-input" id="f-stat3-val" placeholder="Ej: 28">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Trayectoria (un club por línea: 2018-2020 · Club · Liga)</label>
+        <textarea class="form-textarea" id="f-trayectoria" placeholder="2020-2024 · Nacional · Clausura UY&#10;2018-2020 · Peñarol · Clausura UY"></textarea>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="f-seleccion">
+        <label for="f-seleccion">Jugó / juega en selección nacional</label>
+      </div>
+      <div class="form-group" id="seleccion-detail" style="display:none;">
+        <label class="form-label">Detalle selección</label>
+        <input type="text" class="form-input" id="f-seleccion-text" placeholder="Ej: Uruguay · 14 partidos">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Biografía</label>
+        <textarea class="form-textarea" id="f-bio" placeholder="Breve descripción del jugador..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL Highlights - Video 1 (embed)</label>
+        <input type="text" class="form-input" id="f-video" placeholder="https://player.vimeo.com/video/ID?h=HASH">
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL Highlights - Video 2 (embed, opcional)</label>
+        <input type="text" class="form-input" id="f-video2" placeholder="https://player.vimeo.com/video/ID?h=HASH">
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL Highlights - Video 3 (embed, opcional)</label>
+        <input type="text" class="form-input" id="f-video3" placeholder="https://player.vimeo.com/video/ID?h=HASH">
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL Highlights - Video 4 (embed, opcional)</label>
+        <input type="text" class="form-input" id="f-video4" placeholder="https://player.vimeo.com/video/ID?h=HASH">
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL Foto del jugador</label>
+        <input type="text" class="form-input" id="f-foto" placeholder="https://... o dejar vacío">
+      </div>
+
+      <button class="btn-primary" onclick="savePlayer()">💾 Guardar jugador</button>
+      <button id="cancel-edit-btn" style="display:none; margin-top:10px;" class="btn-primary" onclick="cancelEdit()" style="background:var(--border);">Cancelar edición</button>
+    </div>
+
+    <!-- TAB: LISTA JUGADORES -->
+    <div class="tab-content" id="tab-jugadores">
+      <div class="admin-section-title">Jugadores registrados</div>
+      <button class="btn-primary" style="margin-bottom:14px;" onclick="refreshStatsNow(this)">🔄 Actualizar stats ahora</button>
+      <div id="admin-player-list"></div>
+    </div>
+
+    <!-- TAB: NOTICIAS ADMIN -->
+    <div class="tab-content" id="tab-noticias-admin">
+      <div class="admin-section-title">Nueva Noticia</div>
+      <div class="form-group">
+        <label class="form-label">Título</label>
+        <input type="text" class="form-input" id="n-titulo" placeholder="Título de la noticia">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha</label>
+        <input type="text" class="form-input" id="n-fecha" placeholder="Ej: 28 Jun 2026">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contenido</label>
+        <textarea class="form-textarea" id="n-body" style="min-height:120px;" placeholder="Texto de la noticia..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="saveNews()">💾 Publicar noticia</button>
+      <div id="admin-news-list" style="margin-top:20px;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── SUPABASE CONNECTION ───
+const SUPABASE_URL = 'https://epvgqigrcyooavgskmzc.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-m_OmQzyG290M3pOaPCd8Q_e58eq4cT';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const ADMIN_PASS = 'charrua2026';
+
+// Convert DB row (snake_case) <-> app object (camelCase / nested stats)
+function rowToPlayer(r) {
+  return {
+    id: r.id,
+    nombre: r.nombre,
+    posicion: r.posicion,
+    nacimiento: r.nacimiento,
+    club: r.club,
+    pais: r.pais,
+    nacionalidad: r.nacionalidad,
+    altura: r.altura,
+    valor: r.valor,
+    stat1: { label: r.stat1_label || '', val: r.stat1_val || '' },
+    stat2: { label: r.stat2_label || '', val: r.stat2_val || '' },
+    stat3: { label: r.stat3_label || '', val: r.stat3_val || '' },
+    trayectoria: r.trayectoria,
+    seleccion: r.seleccion,
+    seleccionText: r.seleccion_text,
+    bio: r.bio,
+    video: r.video,
+    video2: r.video2,
+    video3: r.video3,
+    video4: r.video4,
+    foto: r.foto,
+    apiFootballId: r.api_football_id || '',
+    apiSeason: r.api_season || '',
+    fotmobId: r.fotmob_id || '',
+    statsSource: r.stats_source || '',
+    sofascoreId: r.sofascore_id || '',
+    stats: r.stats || null,
+    statsUpdatedAt: r.stats_updated_at || null,
+  };
+}
+
+function playerToRow(p) {
+  return {
+    empresa: 'charruasport',
+    nombre: p.nombre,
+    posicion: p.posicion,
+    nacimiento: p.nacimiento,
+    club: p.club,
+    pais: p.pais,
+    nacionalidad: p.nacionalidad,
+    altura: p.altura,
+    valor: p.valor,
+    stat1_label: p.stat1?.label || '',
+    stat1_val: p.stat1?.val || '',
+    stat2_label: p.stat2?.label || '',
+    stat2_val: p.stat2?.val || '',
+    stat3_label: p.stat3?.label || '',
+    stat3_val: p.stat3?.val || '',
+    trayectoria: p.trayectoria,
+    seleccion: p.seleccion,
+    seleccion_text: p.seleccionText,
+    bio: p.bio,
+    video: p.video,
+    video2: p.video2,
+    video3: p.video3,
+    video4: p.video4,
+    foto: p.foto,
+    api_football_id: p.apiFootballId ? parseInt(p.apiFootballId) : null,
+    api_season: p.apiSeason || null,
+    fotmob_id: p.fotmobId ? parseInt(p.fotmobId) : null,
+    stats_source: p.statsSource || null,
+    sofascore_id: p.sofascoreId ? parseInt(p.sofascoreId) : null,
+  };
+}
+
+async function getPlayers() {
+  const { data, error } = await sb.from('players').select('*').eq('empresa', 'charruasport').order('created_at', { ascending: true });
+  if (error) { console.error('Error cargando jugadores:', error); showToast('⚠️ Error al cargar jugadores'); return []; }
+  return data.map(rowToPlayer);
+}
+
+async function insertPlayer(p) {
+  const { error } = await sb.from('players').insert([playerToRow(p)]);
+  if (error) { console.error(error); showToast('⚠️ Error al guardar'); return false; }
+  return true;
+}
+
+async function updatePlayerById(id, p) {
+  const { error } = await sb.from('players').update(playerToRow(p)).eq('id', id);
+  if (error) { console.error(error); showToast('⚠️ Error al actualizar'); return false; }
+  return true;
+}
+
+async function deletePlayerById(id) {
+  const { error } = await sb.from('players').delete().eq('id', id);
+  if (error) { console.error(error); showToast('⚠️ Error al eliminar'); return false; }
+  return true;
+}
+
+async function getNews() {
+  const { data, error } = await sb.from('news').select('*').eq('empresa', 'charruasport').order('created_at', { ascending: true });
+  if (error) { console.error('Error cargando noticias:', error); return []; }
+  return data;
+}
+
+async function insertNews(n) {
+  const { error } = await sb.from('news').insert([{ ...n, empresa: 'charruasport' }]);
+  if (error) { console.error(error); showToast('⚠️ Error al publicar'); return false; }
+  return true;
+}
+
+async function deleteNewsById(id) {
+  const { error } = await sb.from('news').delete().eq('id', id);
+  if (error) { console.error(error); showToast('⚠️ Error al eliminar'); return false; }
+  return true;
+}
+
+// ─── NAVIGATION ───
+async function showSection(name) {
+  document.getElementById('splash').style.display = 'none';
+  const app = document.getElementById('app');
+  app.style.display = 'flex';
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  const titles = { jugadores: 'Jugadores', noticias: 'Noticias', quienes: 'Quiénes Somos' };
+  document.getElementById('topbar-title').textContent = titles[name] || '';
+  if (name === 'jugadores') await renderGrid();
+  if (name === 'noticias') await renderNews();
+  window.scrollTo(0, 0);
+}
+
+function goHome() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('splash').style.display = 'flex';
+  history.replaceState(null, '', window.location.pathname);
+  window.scrollTo(0, 0);
+}
+
+// ─── PLAYERS GRID ───
+let _playersCache = [];
+let _playersPromise = null;
+let _newsPromise = null;
+
+function fetchPlayersOnce(force = false) {
+  if (force || !_playersPromise) _playersPromise = getPlayers();
+  return _playersPromise;
+}
+function fetchNewsOnce(force = false) {
+  if (force || !_newsPromise) _newsPromise = getNews();
+  return _newsPromise;
+}
+// Prefetch: arranca la carga apenas se abre la página, antes de que el usuario navegue
+window.addEventListener('DOMContentLoaded', () => { fetchPlayersOnce(); fetchNewsOnce(); });
+
+async function renderGrid() {
+  const grid = document.getElementById('players-grid');
+  const label = document.getElementById('player-count-label');
+  label.textContent = 'Cargando...';
+  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><span>⏳</span><p>Cargando jugadores...</p></div>';
+
+  _playersCache = await fetchPlayersOnce();
+  label.textContent = _playersCache.length + ' jugadores';
+
+  if (_playersCache.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><span>⚽</span><p>No hay jugadores cargados aún.<br>Usá el panel de administración.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = _playersCache.map((p, i) => `
+    <div class="player-card" onclick="showFicha(${i})">
+      ${p.foto
+        ? `<img class="player-card-img" src="${p.foto}" alt="${p.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        : ''}
+      <div class="player-card-img-placeholder" style="${p.foto ? 'display:none' : ''}">⚽</div>
+      <div class="player-card-info">
+        <div class="player-card-name">${p.nombre}</div>
+        <div class="player-card-pos">${p.posicion || ''}</div>
+        <div class="player-card-club">${p.club || ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── STATS AUTOMÁTICAS (API-Football) ───
+let _fichaTemporadas = [];
+let _fichaEsArquero = false;
+
+function apiStatsRowsHTML(s, esArquero) {
+  const row = (label, val) => (val === null || val === undefined || val === '')
+    ? ''
+    : `<div class="data-row"><span class="data-label">${label}</span><span class="data-val">${val}</span></div>`;
+
+  return [
+    row('Partidos jugados', s.partidos),
+    row('Minutos', s.minutos),
+    esArquero ? '' : row('Goles', s.goles),
+    esArquero ? '' : row('Asistencias', s.asistencias),
+    esArquero ? '' : row('Pases clave', s.pases_clave),
+    s.penales_convertidos ? row('Penales convertidos', s.penales_convertidos) : '',
+    esArquero ? '' : (s.precision_tiros ? row('Precisión de tiros', s.precision_tiros) : ''),
+    esArquero ? row('Atajadas', s.atajadas) : '',
+    esArquero && s.vallas ? row('Vallas invictas', s.vallas) : '',
+    esArquero ? row('Goles recibidos', s.goles_recibidos) : '',
+    s.rating ? row('Rating promedio', '⭐ ' + s.rating) : '',
+    row('Amarillas', s.amarillas),
+    row('Rojas', s.rojas),
+    s.equipos ? `<div class="data-row"><span class="data-label">Equipo</span><span class="data-val" style="font-size:12px;">${s.equipos}</span></div>` : '',
+    s.ligas ? `<div class="data-row"><span class="data-label">Competencias</span><span class="data-val" style="font-size:12px;">${s.ligas}</span></div>` : '',
+  ].filter(Boolean).join('');
+}
+
+function switchApiSeason(i) {
+  const s = _fichaTemporadas[parseInt(i)];
+  if (!s) return;
+  document.getElementById('api-stats-rows').innerHTML = apiStatsRowsHTML(s, _fichaEsArquero);
+}
+
+function renderApiStats(p) {
+  let temporadas = p.stats;
+  if (!temporadas) return '';
+  if (!Array.isArray(temporadas)) temporadas = [temporadas]; // compatibilidad con formato anterior
+  temporadas = temporadas.filter(s => s && s.partidos !== undefined);
+  if (!temporadas.length) return '';
+
+  _fichaTemporadas = temporadas;
+  _fichaEsArquero = (p.posicion || '').toLowerCase().includes('portero') || (p.posicion || '').toLowerCase().includes('arquero');
+
+  const rows = apiStatsRowsHTML(temporadas[0], _fichaEsArquero);
+  if (!rows) return '';
+
+  const fecha = p.statsUpdatedAt ? new Date(p.statsUpdatedAt).toLocaleDateString('es-UY', { day: 'numeric', month: 'short' }) : '';
+
+  const selector = temporadas.length > 1
+    ? `<select class="season-select" onchange="switchApiSeason(this.value)" title="Elegí la temporada">
+        ${temporadas.map((s, i) => `<option value="${i}">${s.temporada_label || s.temporada}</option>`).join('')}
+      </select>`
+    : `<span class="season-single">${temporadas[0].temporada_label || temporadas[0].temporada || ''}</span>`;
+
+  return `
+    <div class="data-table">
+      <div class="data-table-title" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+        <span>Estadísticas Temporada</span>
+        ${selector}
+      </div>
+      <div id="api-stats-rows">${rows}</div>
+      ${fecha ? `<div style="padding:8px 14px;font-size:10px;color:var(--muted);text-align:right;">Actualizado ${fecha} · Fuente: ${temporadas[0].fuente || 'API-Football'}</div>` : ''}
+    </div>`;
+}
+
+// ─── FICHA ───
+function showFicha(idx) {
+  const p = _playersCache[idx];
+  if (!p) return;
+
+  // Set unique URL hash so WhatsApp share points to this exact player
+  window.location.hash = 'jugador-' + p.id;
+
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('topbar-title').textContent = p.nombre;
+
+  const trayectoria = (p.trayectoria || '')
+    .split('\n').filter(l => l.trim())
+    .map(l => {
+      const parts = l.split('·');
+      return `<div class="trayectoria-item">
+        <div class="tray-years">${(parts[0]||'').trim()}</div>
+        <div>
+          <div class="tray-club">${(parts[1]||'').trim()}</div>
+          <div class="tray-liga">${(parts[2]||'').trim()}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+  const stats = [
+    p.stat1 && p.stat1.label ? `<div class="stat-box"><div class="stat-val">${p.stat1.val}</div><div class="stat-label">${p.stat1.label}</div></div>` : '',
+    p.stat2 && p.stat2.label ? `<div class="stat-box"><div class="stat-val">${p.stat2.val}</div><div class="stat-label">${p.stat2.label}</div></div>` : '',
+    p.stat3 && p.stat3.label ? `<div class="stat-box"><div class="stat-val">${p.stat3.val}</div><div class="stat-label">${p.stat3.label}</div></div>` : '',
+  ].filter(Boolean).join('');
+
+  // Build a direct shareable URL pointing to this exact player's hash
+  const playerUrl = window.location.origin + window.location.pathname + '#jugador-' + p.id;
+  const shareText = encodeURIComponent(`🔵 ${p.nombre} · ${p.posicion || ''} · ${p.club || ''}\nVer perfil completo: ${playerUrl}`);
+
+  const ficha = document.getElementById('section-ficha');
+  ficha.innerHTML = `
+    <div class="ficha-hero">
+      <div class="ficha-hero-top">
+        ${p.foto
+          ? `<img class="ficha-photo" src="${p.foto}" alt="${p.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ficha-photo-placeholder" style="display:none">⚽</div>`
+          : `<div class="ficha-photo-placeholder">⚽</div>`}
+        <div class="ficha-basic">
+          <div class="ficha-name">${p.nombre}</div>
+          <div class="ficha-pos-badge">${p.posicion || ''}</div>
+          <div class="ficha-club">${p.club || ''}${p.pais ? ' · ' + p.pais : ''}</div>
+          ${p.seleccion ? `<div class="seleccion-badge">🏆 Selección Nacional <span style="font-weight:400;opacity:0.8;">${p.seleccionText ? '· ' + p.seleccionText : ''}</span></div>` : ''}
+          ${p.valor ? `<div class="ficha-market" style="margin-top:10px;"><div class="ficha-market-label">Valor Mercado</div><div class="ficha-market-val">${p.valor}</div></div>` : ''}
+        </div>
+      </div>
+    </div>
+
+    ${stats ? `<div class="stats-grid">${stats}</div>` : ''}
+
+    <div class="ficha-tables-wrap">
+    ${renderApiStats(p)}
+
+    <div class="data-table">
+      <div class="data-table-title">Datos personales</div>
+      ${p.nacimiento ? `<div class="data-row"><span class="data-label">Fecha de nacimiento</span><span class="data-val">${p.nacimiento}</span></div>` : ''}
+      ${p.nacionalidad ? `<div class="data-row"><span class="data-label">Nacionalidad</span><span class="data-val">${p.nacionalidad}</span></div>` : ''}
+      ${p.altura ? `<div class="data-row"><span class="data-label">Altura</span><span class="data-val">${p.altura}</span></div>` : ''}
+      ${p.club ? `<div class="data-row"><span class="data-label">Club actual</span><span class="data-val">${p.club}</span></div>` : ''}
+    </div>
+    </div>
+
+    ${p.sofascoreId ? `
+    <div class="data-table">
+      <div class="data-table-title">Análisis SofaScore</div>
+      <iframe src="https://widgets.sofascore.com/es-ES/embed/player/${p.sofascoreId}?widgetTheme=dark"
+        style="height:568px;width:100%;border:0;display:block;" scrolling="no" loading="lazy"></iframe>
+    </div>` : ''}
+
+    ${trayectoria ? `
+    <div class="data-table">
+      <div class="data-table-title">Trayectoria</div>
+      ${trayectoria}
+    </div>` : ''}
+
+    ${p.bio ? `
+    <div class="data-table">
+      <div class="data-table-title">Biografía</div>
+      <div style="padding:14px;"><p class="bio-text">${p.bio}</p></div>
+    </div>` : ''}
+
+    ${[p.video, p.video2, p.video3, p.video4].filter(v => v).length ? `
+    <div class="data-table">
+      <div class="data-table-title">Highlights</div>
+      <div style="padding:12px;">
+        ${[p.video, p.video2, p.video3, p.video4].filter(v => v).map((v, i, arr) => `
+        <div class="video-embed"${i < arr.length - 1 ? ' style="margin-bottom:12px;"' : ''}><iframe src="${v}" allowfullscreen></iframe></div>`).join('')}
+      </div>
+    </div>` : `
+    <div class="data-table">
+      <div class="data-table-title">Highlights</div>
+      <div style="padding:12px;">
+        <div class="video-placeholder"><span>🎬</span><span>Video próximamente</span></div>
+      </div>
+    </div>`}
+
+    <a class="share-btn" href="https://wa.me/?text=${shareText}" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Compartir perfil por WhatsApp
+    </a>
+
+    <button class="pdf-btn" id="pdf-export-btn" onclick="exportPlayerPdf(${idx})">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+      Descargar ficha en PDF
+    </button>
+  `;
+
+  ficha.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── PDF EXPORT ───
+function videoEmbedToPublicUrl(embedUrl) {
+  if (!embedUrl) return '';
+  // Vimeo: https://player.vimeo.com/video/ID?h=hash -> https://vimeo.com/ID/hash
+  const vimeoMatch = embedUrl.match(/player\.vimeo\.com\/video\/(\d+)(?:\?h=([a-zA-Z0-9]+))?/);
+  if (vimeoMatch) {
+    const id = vimeoMatch[1];
+    const hash = vimeoMatch[2];
+    return hash ? `https://vimeo.com/${id}/${hash}` : `https://vimeo.com/${id}`;
+  }
+  // YouTube embed: https://www.youtube.com/embed/ID -> https://youtu.be/ID
+  const ytMatch = embedUrl.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
+  if (ytMatch) {
+    return `https://youtu.be/${ytMatch[1]}`;
+  }
+  // Fallback: return as-is
+  return embedUrl;
+}
+
+async function exportPlayerPdf(idx) {
+  const p = _playersCache[idx];
+  if (!p) return;
+  const btn = document.getElementById('pdf-export-btn');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Generando PDF...';
+
+  try {
+    const trayectoria = (p.trayectoria || '')
+      .split('\n').filter(l => l.trim())
+      .map(l => {
+        const parts = l.split('·');
+        return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #2a2a2a;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#c4c4c4;min-width:90px;">${(parts[0]||'').trim()}</div>
+          <div>
+            <div style="font-size:14px;color:#e8edf5;font-weight:500;">${(parts[1]||'').trim()}</div>
+            <div style="font-size:12px;color:#8a9ab5;margin-top:2px;">${(parts[2]||'').trim()}</div>
+          </div>
+        </div>`;
+      }).join('');
+
+    const stats = [
+      p.stat1 && p.stat1.label ? { l: p.stat1.label, v: p.stat1.val } : null,
+      p.stat2 && p.stat2.label ? { l: p.stat2.label, v: p.stat2.val } : null,
+      p.stat3 && p.stat3.label ? { l: p.stat3.label, v: p.stat3.val } : null,
+    ].filter(Boolean);
+
+    const statsHtml = stats.length ? `
+      <div style="display:grid;grid-template-columns:repeat(${stats.length},1fr);gap:8px;margin-bottom:14px;">
+        ${stats.map(s => `
+          <div style="background:#0f1520;border:1px solid #2a2a2a;border-radius:10px;padding:14px 8px;text-align:center;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;color:#c4c4c4;line-height:1;">${s.v}</div>
+            <div style="font-size:10px;color:#8a9ab5;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">${s.l}</div>
+          </div>
+        `).join('')}
+      </div>` : '';
+
+    // Build the export node off-screen
+    let exportArea = document.getElementById('pdf-export-area');
+    if (!exportArea) {
+      exportArea = document.createElement('div');
+      exportArea.id = 'pdf-export-area';
+      document.body.appendChild(exportArea);
+    }
+
+    exportArea.innerHTML = `
+      <div style="font-family:'Inter',sans-serif;background:#080c12;padding:8px;border-radius:14px;">
+        <div style="background:linear-gradient(135deg,#151d2e 0%,#0f1520 100%);border:1px solid #2a2a2a;border-radius:14px;overflow:hidden;margin-bottom:16px;">
+          <div style="display:flex;gap:16px;padding:20px;align-items:flex-start;">
+            ${p.foto ? `<img src="${p.foto}" crossorigin="anonymous" style="width:120px;height:150px;border-radius:10px;object-fit:cover;object-position:top;border:2px solid #2a2a2a;flex-shrink:0;">` : `<div style="width:120px;height:150px;border-radius:10px;background:#0f1520;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;">⚽</div>`}
+            <div style="flex:1;min-width:0;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;line-height:1;text-transform:uppercase;color:#e8edf5;">${p.nombre}</div>
+              <div style="display:inline-block;background:#8a8a8a;color:white;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.08em;padding:4px 9px;border-radius:4px;text-transform:uppercase;margin:8px 0;">${p.posicion || ''}</div>
+              <div style="font-size:13px;color:#8a9ab5;margin-bottom:10px;">${p.club || ''}${p.pais ? ' · ' + p.pais : ''}</div>
+              ${p.seleccion ? `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(61,186,126,0.1);border:1px solid rgba(61,186,126,0.3);color:#3dba7e;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;margin-bottom:8px;">🏆 Selección Nacional ${p.seleccionText ? '· ' + p.seleccionText : ''}</div><br>` : ''}
+              ${p.valor ? `<div style="background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.3);border-radius:8px;padding:8px 10px;display:inline-block;margin-top:6px;">
+                <div style="font-size:9px;color:#c9a227;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;">Valor Mercado</div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:#c9a227;line-height:1.1;">${p.valor}</div>
+              </div>` : ''}
+            </div>
+          </div>
+        </div>
+
+        ${statsHtml}
+
+        <div style="background:#0f1520;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;margin-bottom:14px;">
+          <div style="padding:10px 14px;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;border-bottom:1px solid #2a2a2a;">Datos personales</div>
+          ${p.nacimiento ? `<div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #2a2a2a;"><span style="font-size:12px;color:#8a9ab5;">Fecha de nacimiento</span><span style="font-size:13px;color:#e8edf5;font-weight:500;">${p.nacimiento}</span></div>` : ''}
+          ${p.nacionalidad ? `<div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #2a2a2a;"><span style="font-size:12px;color:#8a9ab5;">Nacionalidad</span><span style="font-size:13px;color:#e8edf5;font-weight:500;">${p.nacionalidad}</span></div>` : ''}
+          ${p.altura ? `<div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #2a2a2a;"><span style="font-size:12px;color:#8a9ab5;">Altura</span><span style="font-size:13px;color:#e8edf5;font-weight:500;">${p.altura}</span></div>` : ''}
+          ${p.club ? `<div style="display:flex;justify-content:space-between;padding:10px 14px;"><span style="font-size:12px;color:#8a9ab5;">Club actual</span><span style="font-size:13px;color:#e8edf5;font-weight:500;">${p.club}</span></div>` : ''}
+        </div>
+
+        ${trayectoria ? `
+        <div style="background:#0f1520;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;margin-bottom:14px;padding:0 14px;">
+          <div style="padding:10px 0;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;border-bottom:1px solid #2a2a2a;">Trayectoria</div>
+          ${trayectoria}
+        </div>` : ''}
+
+        ${p.bio ? `
+        <div style="background:#0f1520;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;margin-bottom:14px;">
+          <div style="padding:10px 14px;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;border-bottom:1px solid #2a2a2a;">Biografía</div>
+          <div style="padding:14px;"><p style="font-size:13px;line-height:1.7;color:#8a9ab5;margin:0;">${p.bio}</p></div>
+        </div>` : ''}
+
+        ${p.video ? `
+        <div style="background:#0f1520;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;margin-bottom:14px;">
+          <div style="padding:10px 14px;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;border-bottom:1px solid #2a2a2a;">Highlights</div>
+          <div id="pdf-video-link-row" style="padding:14px;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:20px;">🎬</span>
+            <span style="font-size:12px;color:#c4c4c4;word-break:break-all;">${videoEmbedToPublicUrl(p.video)}</span>
+          </div>
+        </div>` : ''}
+
+        <div style="text-align:center;padding:14px 0 6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#6a6a6a;">Charrúa Sport</div>
+      </div>
+    `;
+
+    await new Promise(r => setTimeout(r, 150)); // let images settle
+
+    const exportAreaRect = exportArea.getBoundingClientRect();
+    const videoLinkEl = document.getElementById('pdf-video-link-row');
+    const videoLinkRect = videoLinkEl ? videoLinkEl.getBoundingClientRect() : null;
+
+    const canvas = await html2canvas(exportArea, {
+      backgroundColor: '#080c12',
+      scale: 2,
+      useCORS: true,
+      logging: false
+    });
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const { jsPDF } = window.jspdf;
+    const pdfWidth = canvas.width / 2;
+    const pdfHeight = canvas.height / 2;
+    const pdf = new jsPDF({ unit: 'px', format: [pdfWidth, pdfHeight] });
+    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+    // Overlay a real clickable link on top of the rendered video-link text
+    if (videoLinkRect && p.video) {
+      const relX = videoLinkRect.left - exportAreaRect.left;
+      const relY = videoLinkRect.top - exportAreaRect.top;
+      pdf.link(relX, relY, videoLinkRect.width, videoLinkRect.height, { url: videoEmbedToPublicUrl(p.video) });
+    }
+
+    pdf.save(`${p.nombre.replace(/\s+/g, '_')}_ficha.pdf`);
+
+    showToast('✅ PDF descargado');
+  } catch (e) {
+    console.error('Error generando PDF:', e);
+    showToast('⚠️ Error al generar el PDF');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+}
+
+// ─── NEWS ───
+let _newsCache = [];
+
+async function renderNews() {
+  const container = document.getElementById('news-container');
+  container.innerHTML = '<div class="empty-state"><span>⏳</span><p>Cargando noticias...</p></div>';
+  _newsCache = await fetchNewsOnce();
+  if (_newsCache.length === 0) {
+    container.innerHTML = '<div class="empty-state"><span>📰</span><p>No hay noticias publicadas aún.</p></div>';
+    return;
+  }
+  container.innerHTML = _newsCache.slice().reverse().map(n => `
+    <div class="news-card">
+      <div class="news-date">${n.fecha || ''}</div>
+      <div class="news-title">${n.titulo}</div>
+      <div class="news-body">${n.body}</div>
+    </div>
+  `).join('');
+}
+
+// ─── ADMIN ───
+function showAdmin() {
+  document.getElementById('admin-login').style.display = 'flex';
+}
+
+function hideAdmin() {
+  document.getElementById('admin-login').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'none';
+}
+
+async function doLogin() {
+  const pass = document.getElementById('admin-pass').value;
+  const err = document.getElementById('login-error');
+  if (pass === ADMIN_PASS) {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'flex';
+    document.getElementById('admin-pass').value = '';
+    err.style.display = 'none';
+    await renderAdminPlayers();
+    await renderAdminNews();
+  } else {
+    err.style.display = 'block';
+  }
+}
+
+async function switchAdminTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'jugadores') await renderAdminPlayers();
+  if (name === 'noticias-admin') await renderAdminNews();
+}
+
+document.getElementById('f-seleccion').addEventListener('change', function() {
+  document.getElementById('seleccion-detail').style.display = this.checked ? 'block' : 'none';
+});
+
+function getFormData() {
+  return {
+    nombre: document.getElementById('f-nombre').value.trim(),
+    posicion: document.getElementById('f-posicion').value,
+    nacimiento: document.getElementById('f-nacimiento').value.trim(),
+    club: document.getElementById('f-club').value.trim(),
+    pais: document.getElementById('f-pais').value.trim(),
+    nacionalidad: document.getElementById('f-nacionalidad').value.trim(),
+    altura: document.getElementById('f-altura').value.trim(),
+    valor: document.getElementById('f-valor').value.trim(),
+    stat1: { label: document.getElementById('f-stat1-label').value.trim(), val: document.getElementById('f-stat1-val').value.trim() },
+    stat2: { label: document.getElementById('f-stat2-label').value.trim(), val: document.getElementById('f-stat2-val').value.trim() },
+    stat3: { label: document.getElementById('f-stat3-label').value.trim(), val: document.getElementById('f-stat3-val').value.trim() },
+    trayectoria: document.getElementById('f-trayectoria').value.trim(),
+    seleccion: document.getElementById('f-seleccion').checked,
+    seleccionText: document.getElementById('f-seleccion-text').value.trim(),
+    bio: document.getElementById('f-bio').value.trim(),
+    video: document.getElementById('f-video').value.trim(),
+    video2: document.getElementById('f-video2').value.trim(),
+    video3: document.getElementById('f-video3').value.trim(),
+    video4: document.getElementById('f-video4').value.trim(),
+    foto: document.getElementById('f-foto').value.trim(),
+    apiFootballId: document.getElementById('f-apiid').value.trim(),
+    apiSeason: document.getElementById('f-apiseason').value,
+    fotmobId: document.getElementById('f-fotmob').value.trim(),
+    statsSource: document.getElementById('f-source').value,
+    sofascoreId: document.getElementById('f-sofascore').value.trim(),
+  };
+}
+
+function clearForm() {
+  ['f-nombre','f-nacimiento','f-club','f-pais','f-nacionalidad','f-altura','f-valor',
+   'f-stat1-label','f-stat1-val','f-stat2-label','f-stat2-val','f-stat3-label','f-stat3-val',
+   'f-trayectoria','f-seleccion-text','f-bio','f-video','f-video2','f-video3','f-video4','f-foto','f-apiid','f-api-search','f-api-pais','f-api-anio','f-apiseason','f-source','f-fotmob','f-sofascore'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('api-search-results').innerHTML = '';
+  document.getElementById('f-posicion').value = '';
+  document.getElementById('f-seleccion').checked = false;
+  document.getElementById('seleccion-detail').style.display = 'none';
+  document.getElementById('edit-id').value = '';
+  document.getElementById('cancel-edit-btn').style.display = 'none';
+}
+
+async function savePlayer() {
+  const data = getFormData();
+  if (!data.nombre || !data.posicion || !data.club) {
+    showToast('⚠️ Completá nombre, posición y club');
+    return;
+  }
+  const editId = document.getElementById('edit-id').value;
+  let ok;
+  if (editId !== '') {
+    ok = await updatePlayerById(editId, data);
+    if (ok) showToast('✅ Jugador actualizado');
+  } else {
+    ok = await insertPlayer(data);
+    if (ok) showToast('✅ Jugador guardado');
+  }
+  if (ok) {
+    clearForm();
+    await renderAdminPlayers();
+  }
+}
+
+function editPlayer(idx) {
+  const p = _adminPlayersCache[idx];
+  document.getElementById('f-nombre').value = p.nombre || '';
+  document.getElementById('f-posicion').value = p.posicion || '';
+  document.getElementById('f-nacimiento').value = p.nacimiento || '';
+  document.getElementById('f-club').value = p.club || '';
+  document.getElementById('f-pais').value = p.pais || '';
+  document.getElementById('f-nacionalidad').value = p.nacionalidad || '';
+  document.getElementById('f-altura').value = p.altura || '';
+  document.getElementById('f-valor').value = p.valor || '';
+  document.getElementById('f-stat1-label').value = p.stat1?.label || '';
+  document.getElementById('f-stat1-val').value = p.stat1?.val || '';
+  document.getElementById('f-stat2-label').value = p.stat2?.label || '';
+  document.getElementById('f-stat2-val').value = p.stat2?.val || '';
+  document.getElementById('f-stat3-label').value = p.stat3?.label || '';
+  document.getElementById('f-stat3-val').value = p.stat3?.val || '';
+  document.getElementById('f-trayectoria').value = p.trayectoria || '';
+  document.getElementById('f-seleccion').checked = p.seleccion || false;
+  document.getElementById('f-seleccion-text').value = p.seleccionText || '';
+  document.getElementById('seleccion-detail').style.display = p.seleccion ? 'block' : 'none';
+  document.getElementById('f-bio').value = p.bio || '';
+  document.getElementById('f-video').value = p.video || '';
+  document.getElementById('f-video2').value = p.video2 || '';
+  document.getElementById('f-video3').value = p.video3 || '';
+  document.getElementById('f-video4').value = p.video4 || '';
+  document.getElementById('f-foto').value = p.foto || '';
+  document.getElementById('f-apiid').value = p.apiFootballId || '';
+  document.getElementById('f-apiseason').value = p.apiSeason || '';
+  document.getElementById('f-source').value = p.statsSource || '';
+  document.getElementById('f-fotmob').value = p.fotmobId || '';
+  document.getElementById('f-sofascore').value = p.sofascoreId || '';
+  document.getElementById('edit-id').value = p.id;
+  document.getElementById('cancel-edit-btn').style.display = 'block';
+  switchAdminTab('agregar', document.querySelectorAll('.tab')[0]);
+  window.scrollTo(0, 0);
+}
+
+function cancelEdit() { clearForm(); }
+
+// ─── API-FOOTBALL: VINCULAR JUGADOR ───
+(function fillSeasonSelect() {
+  const sel = document.getElementById('f-apiseason');
+  if (!sel) return;
+  const y = new Date().getFullYear();
+  [`${y}/${y+1}`, `${y}`, `${y-1}/${y}`, `${y-1}`, `${y-2}/${y-1}`].forEach(v => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    sel.appendChild(o);
+  });
+})();
+
+async function searchApiPlayer() {
+  const q = document.getElementById('f-api-search').value.trim();
+  const pais = document.getElementById('f-api-pais').value.trim();
+  const anio = document.getElementById('f-api-anio').value.trim();
+  const box = document.getElementById('api-search-results');
+  if (q.length < 3) { showToast('⚠️ Escribí al menos 3 letras'); return; }
+  box.innerHTML = '<div style="padding:10px;color:var(--muted);font-size:13px;">⏳ Buscando...</div>';
+  try {
+    const r = await fetch('/.netlify/functions/link-player?q=' + encodeURIComponent(q) + (pais ? '&pais=' + encodeURIComponent(pais) : '') + (anio ? '&anio=' + encodeURIComponent(anio) : ''));
+    const j = await r.json();
+    if (!r.ok || !j.resultados || !j.resultados.length) {
+      box.innerHTML = '<div style="padding:10px;color:var(--muted);font-size:13px;">Sin resultados. Probá solo con el apellido.</div>';
+      return;
+    }
+    box.innerHTML = j.resultados.map(p => {
+      const pos = { 'Goalkeeper': 'Arquero', 'Defender': 'Defensa', 'Midfielder': 'Volante', 'Attacker': 'Delantero' }[p.posicion] || p.posicion;
+      const linea1 = [p.edad ? p.edad + ' años' : '', p.nacionalidad, p.nacimiento].filter(Boolean).join(' · ');
+      const linea2 = [pos, p.altura, p.lugar].filter(Boolean).join(' · ');
+      return `
+      <div class="admin-player-item" style="cursor:pointer;" onclick="pickApiPlayer(${p.id}, '${(p.nombre||'').replace(/'/g, "\\'")}')">
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${p.foto ? `<img src="${p.foto}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">` : ''}
+          <div>
+            <div class="admin-player-name">${p.nombre}</div>
+            <div class="admin-player-meta">${linea1}</div>
+            ${linea2 ? `<div class="admin-player-meta" style="color:var(--accent-light);">${linea2}</div>` : ''}
+          </div>
+        </div>
+        <span style="color:var(--accent-light);font-size:12px;">ID ${p.id}</span>
+      </div>
+    `;}).join('');
+  } catch (e) {
+    box.innerHTML = '<div style="padding:10px;color:var(--danger);font-size:13px;">Error de conexión</div>';
+  }
+}
+
+function pickApiPlayer(id, nombre) {
+  document.getElementById('f-apiid').value = id;
+  document.getElementById('api-search-results').innerHTML = '';
+  document.getElementById('f-api-search').value = '';
+  showToast('🔗 Vinculado: ' + nombre + ' (ID ' + id + ')');
+}
+
+async function refreshStatsNow(btn) {
+  const secret = prompt('Clave de actualización:');
+  if (!secret) return;
+  btn.disabled = true;
+  btn.textContent = '⏳ Actualizando...';
+  try {
+    const r = await fetch('/.netlify/functions/refresh-stats?secret=' + encodeURIComponent(secret));
+    const j = await r.json();
+    if (r.ok) {
+      showToast('✅ ' + j.actualizados + ' de ' + j.total + ' jugadores actualizados');
+      console.log('Detalle actualización:', j.detalle);
+      await renderAdminPlayers();
+    } else {
+      showToast('⚠️ ' + (j.error || 'Error al actualizar'));
+    }
+  } catch (e) {
+    showToast('⚠️ Error de conexión');
+  }
+  btn.disabled = false;
+  btn.textContent = '🔄 Actualizar stats ahora';
+}
+
+async function deletePlayer(idx) {
+  if (!confirm('¿Eliminar este jugador?')) return;
+  const p = _adminPlayersCache[idx];
+  const ok = await deletePlayerById(p.id);
+  if (ok) {
+    await renderAdminPlayers();
+    showToast('🗑 Jugador eliminado');
+  }
+}
+
+let _adminPlayersCache = [];
+
+async function renderAdminPlayers() {
+  const el = document.getElementById('admin-player-list');
+  el.innerHTML = '<div class="empty-state"><span>⏳</span><p>Cargando...</p></div>';
+  _adminPlayersCache = await fetchPlayersOnce(true);
+  if (_adminPlayersCache.length === 0) {
+    el.innerHTML = '<div class="empty-state"><span>⚽</span><p>Sin jugadores aún</p></div>';
+    return;
+  }
+  el.innerHTML = _adminPlayersCache.map((p, i) => `
+    <div class="admin-player-item">
+      <div>
+        <div class="admin-player-name">${p.nombre} ${p.apiFootballId ? '<span style="color:var(--success);font-size:11px;">🔗 API</span>' : ''}</div>
+        <div class="admin-player-meta">${p.posicion || ''} · ${p.club || ''}${p.stats ? (()=>{const s=Array.isArray(p.stats)?p.stats[0]:p.stats; return s ? ' · ' + (s.partidos || 0) + ' PJ / ' + (s.goles || 0) + ' G / ' + (s.asistencias || 0) + ' A' : '';})() : ''}</div>
+      </div>
+      <div class="admin-btn-group">
+        <button class="btn-edit" onclick="editPlayer(${i})">✏️ Editar</button>
+        <button class="btn-danger" onclick="deletePlayer(${i})">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── ADMIN NEWS ───
+async function saveNews() {
+  const titulo = document.getElementById('n-titulo').value.trim();
+  const fecha = document.getElementById('n-fecha').value.trim();
+  const body = document.getElementById('n-body').value.trim();
+  if (!titulo || !body) { showToast('⚠️ Completá título y contenido'); return; }
+  const ok = await insertNews({ titulo, fecha, body });
+  if (ok) {
+    document.getElementById('n-titulo').value = '';
+    document.getElementById('n-fecha').value = '';
+    document.getElementById('n-body').value = '';
+    showToast('✅ Noticia publicada');
+    await renderAdminNews();
+  }
+}
+
+let _adminNewsCache = [];
+
+async function deleteNews(idx) {
+  if (!confirm('¿Eliminar esta noticia?')) return;
+  const n = _adminNewsCache[idx];
+  const ok = await deleteNewsById(n.id);
+  if (ok) {
+    await renderAdminNews();
+    showToast('🗑 Noticia eliminada');
+  }
+}
+
+async function renderAdminNews() {
+  const el = document.getElementById('admin-news-list');
+  el.innerHTML = '<div class="admin-section-title" style="margin-top:20px;">Noticias publicadas</div><div class="empty-state"><span>⏳</span><p>Cargando...</p></div>';
+  _adminNewsCache = await fetchNewsOnce(true);
+  if (_adminNewsCache.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = '<div class="admin-section-title" style="margin-top:20px;">Noticias publicadas</div>' +
+    _adminNewsCache.slice().reverse().map((n, ri) => {
+      const i = _adminNewsCache.length - 1 - ri;
+      return `<div class="admin-player-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
+        <div>
+          <div class="admin-player-name">${n.titulo}</div>
+          <div class="admin-player-meta">${n.fecha || ''}</div>
+        </div>
+        <button class="btn-danger" onclick="deleteNews(${i})">🗑 Eliminar</button>
+      </div>`;
+    }).join('');
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── DEEP LINK: open a specific player if URL has #jugador-ID ───
+async function checkDeepLink() {
+  const hash = window.location.hash;
+  if (hash && hash.startsWith('#jugador-')) {
+    const playerId = hash.replace('#jugador-', '');
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    _playersCache = await fetchPlayersOnce();
+    const idx = _playersCache.findIndex(p => p.id === playerId);
+    if (idx !== -1) {
+      showFicha(idx);
+    } else {
+      showSection('jugadores');
+    }
+  }
+}
+window.addEventListener('DOMContentLoaded', checkDeepLink);
+</script>
+</body>
+</html>
