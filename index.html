@@ -81,14 +81,19 @@ body {
   position: relative;
   z-index: 1;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   animation: fadeUp 0.8s ease both;
 }
 
 .splash-logo-wrap img {
-  width: 220px;
+  width: 300px;
+  max-width: 78vw;
   height: auto;
-  margin-bottom: 8px;
-  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5));
+  margin-bottom: 10px;
+  filter: drop-shadow(0 8px 30px rgba(0,0,0,0.6));
 }
 
 .splash-tagline {
