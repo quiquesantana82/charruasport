@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>ASF Agency — Perfiles de Jugadores</title>
+<title>VIDEOSJUGADORES — Perfiles de Jugadores</title>
 <meta name="description" content="Perfiles profesionales de futbolistas: datos, trayectoria y videos.">
-<meta property="og:title" content="ASF Agency">
+<meta property="og:title" content="VIDEOSJUGADORES">
 <meta property="og:description" content="Perfiles profesionales de futbolistas: datos, trayectoria y videos.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,8 +22,8 @@
   --linea:#232C38;
   --blanco:#F4F6F8;
   --gris:#8B97A5;
-  --verde:#34D399;
-  --verde-osc:#0E9F6E;
+  --celeste:#57B8E8;
+  --celeste-osc:#2E7FB0;
   --rojo:#E85757;
   --radius:14px;
 }
@@ -57,17 +57,12 @@ a{color:inherit;text-decoration:none}
 .wordmark.wm-invert .wm-videos{background:var(--negro);color:var(--blanco)}
 .wordmark.wm-invert .wm-jugadores{color:var(--negro)}
 
-/* ============ LOGO ASF ============ */
-.logo-asf{width:auto;display:block;object-fit:contain}
-.logo-asf--splash{height:clamp(56px,16vw,110px);filter:drop-shadow(0 8px 34px rgba(52,211,153,.28));animation:entra .7s cubic-bezier(.2,.9,.3,1) both}
-.logo-asf--header{height:30px}
-
 /* ============ SPLASH ============ */
 #splash{
   position:fixed;inset:0;z-index:100;
   background:
-    radial-gradient(120% 90% at 50% -10%, rgba(52,211,153,.13), transparent 55%),
-    radial-gradient(90% 60% at 50% 115%, rgba(52,211,153,.07), transparent 60%),
+    radial-gradient(120% 90% at 50% -10%, rgba(87,184,232,.13), transparent 55%),
+    radial-gradient(90% 60% at 50% 115%, rgba(87,184,232,.07), transparent 60%),
     var(--negro);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:36px;padding:24px;text-align:center;
@@ -80,21 +75,26 @@ a{color:inherit;text-decoration:none}
   font-size:clamp(15px,4vw,19px);letter-spacing:.34em;text-transform:uppercase;
   animation:entra .7s .2s cubic-bezier(.2,.9,.3,1) both;
 }
+#splash .logo-splash{
+  width:min(460px,84vw);height:auto;
+  animation:entra .7s cubic-bezier(.2,.9,.3,1) both;
+  filter:drop-shadow(0 10px 40px rgba(87,184,232,.22));
+}
 #splash .linea-cancha{
-  width:min(320px,70vw);height:1px;background:linear-gradient(90deg,transparent,var(--verde),transparent);
+  width:min(320px,70vw);height:1px;background:linear-gradient(90deg,transparent,var(--celeste),transparent);
   animation:entra .7s .35s both;
 }
 .btn-entrar{
-  background:var(--verde);color:var(--negro);
+  background:var(--celeste);color:var(--negro);
   font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;
   letter-spacing:.14em;text-transform:uppercase;
   padding:16px 44px;border-radius:999px;
   animation:entra .7s .5s cubic-bezier(.2,.9,.3,1) both;
   transition:transform .15s ease, box-shadow .15s ease;
-  box-shadow:0 8px 30px rgba(52,211,153,.25);
+  box-shadow:0 8px 30px rgba(87,184,232,.25);
 }
 .btn-entrar:active{transform:scale(.96)}
-@media(hover:hover){.btn-entrar:hover{transform:translateY(-2px);box-shadow:0 12px 38px rgba(52,211,153,.4)}}
+@media(hover:hover){.btn-entrar:hover{transform:translateY(-2px);box-shadow:0 12px 38px rgba(87,184,232,.4)}}
 @keyframes entra{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;transition-duration:.01ms!important}
@@ -110,7 +110,7 @@ header{
 }
 header .wordmark{font-size:20px}
 .btn-admin{color:var(--gris);font-size:20px;padding:6px 8px;border-radius:8px;transition:color .15s}
-.btn-admin:hover{color:var(--verde)}
+.btn-admin:hover{color:var(--celeste)}
 
 /* ============ LAYOUT GENERAL ============ */
 main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
@@ -120,14 +120,14 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
   font-family:'Barlow Condensed',sans-serif;
 }
 .titulo-seccion h2{font-size:clamp(28px,6vw,40px);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.titulo-seccion .cant{color:var(--verde);font-size:clamp(18px,4vw,24px);font-weight:600}
+.titulo-seccion .cant{color:var(--celeste);font-size:clamp(18px,4vw,24px);font-weight:600}
 .buscador{
   width:100%;background:var(--carbon);border:1px solid var(--linea);border-radius:999px;
   color:var(--blanco);padding:13px 20px;margin-bottom:24px;outline:none;
   transition:border-color .15s;
 }
 .buscador::placeholder{color:var(--gris)}
-.buscador:focus{border-color:var(--verde)}
+.buscador:focus{border-color:var(--celeste)}
 
 /* ============ GRID JUGADORES ============ */
 .grid-jugadores{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
@@ -139,7 +139,7 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
 }
 .card-jugador:active{transform:scale(.97)}
 @media(hover:hover){
-  .card-jugador:hover{transform:translateY(-4px);border-color:var(--verde);box-shadow:0 14px 34px rgba(0,0,0,.45)}
+  .card-jugador:hover{transform:translateY(-4px);border-color:var(--celeste);box-shadow:0 14px 34px rgba(0,0,0,.45)}
 }
 .card-foto{aspect-ratio:4/5;background:var(--panel);position:relative;overflow:hidden}
 .card-foto img{width:100%;height:100%;object-fit:cover;object-position:top center}
@@ -160,8 +160,8 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
 .chip{
   font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
   letter-spacing:.08em;text-transform:uppercase;
-  background:rgba(52,211,153,.12);color:var(--verde);
-  border:1px solid rgba(52,211,153,.3);
+  background:rgba(87,184,232,.12);color:var(--celeste);
+  border:1px solid rgba(87,184,232,.3);
   padding:3px 9px;border-radius:999px;
 }
 .vacio{
@@ -177,7 +177,7 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
   letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;
   transition:color .15s;
 }
-.btn-volver:hover{color:var(--verde)}
+.btn-volver:hover{color:var(--celeste)}
 .ficha-hero{
   display:grid;gap:22px;background:var(--carbon);
   border:1px solid var(--linea);border-radius:var(--radius);overflow:hidden;
@@ -210,7 +210,7 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
 .btn-wsp:active{transform:scale(.96)}
 .btn-pdf{
   align-self:flex-start;display:inline-flex;align-items:center;gap:9px;
-  background:var(--verde);color:#04202f;font-weight:600;font-size:15px;
+  background:var(--celeste);color:#04202f;font-weight:600;font-size:15px;
   padding:11px 20px;border-radius:999px;margin-top:4px;
   transition:transform .15s,opacity .15s;
 }
@@ -223,7 +223,7 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
 .bloque-titulo{
   display:inline-flex;margin-bottom:16px;font-size:17px;
 }
-.bloque-titulo .wm-videos{background:var(--verde);color:var(--negro);font-family:'Archivo',sans-serif;font-weight:900;padding:.16em .35em .12em}
+.bloque-titulo .wm-videos{background:var(--celeste);color:var(--negro);font-family:'Archivo',sans-serif;font-weight:900;padding:.16em .35em .12em}
 .bloque-titulo .wm-resto{
   font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;
   text-transform:uppercase;padding:.16em 0 .12em .4em;display:flex;align-items:center;
@@ -235,7 +235,7 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
 }
 .tray-item:last-child{border-bottom:none}
 .tray-anio{
-  font-family:'Barlow Condensed',sans-serif;font-weight:600;color:var(--verde);
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;color:var(--celeste);
   font-size:16px;letter-spacing:.05em;min-width:110px;flex-shrink:0;
 }
 .tray-club{font-size:16px;font-weight:500}
@@ -250,8 +250,8 @@ main{max-width:1240px;margin:0 auto;padding:26px 22px 90px}
   font-size:15px;letter-spacing:.08em;padding:6px 10px;border-radius:8px;
   border:1px solid var(--linea);transition:color .15s,border-color .15s;
 }
-.btn-idioma:hover{color:var(--verde);border-color:var(--verde)}
-.btn-idioma b{color:var(--verde)}
+.btn-idioma:hover{color:var(--celeste);border-color:var(--celeste)}
+.btn-idioma b{color:var(--celeste)}
 header .fila-header{display:flex;align-items:center;gap:10px}
 
 /* ─── WYSCOUT LOADER (admin) ─── */
@@ -261,9 +261,9 @@ header .fila-header{display:flex;align-items:center;gap:10px}
   background:var(--negro);color:var(--blanco);text-align:center;cursor:pointer;
   font-size:14px;transition:border-color .15s,background .15s;
 }
-#wyscout-drop:hover,#wyscout-drop.drag{border-color:var(--verde);background:var(--panel)}
+#wyscout-drop:hover,#wyscout-drop.drag{border-color:var(--celeste);background:var(--panel)}
 .wy-season-card{border:1px solid var(--linea);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--panel)}
-.wy-season-head{font-weight:700;font-size:14px;margin-bottom:6px;color:var(--verde)}
+.wy-season-head{font-weight:700;font-size:14px;margin-bottom:6px;color:var(--celeste)}
 .wy-stat-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;border-bottom:1px solid var(--linea)}
 .wy-stat-row:last-child{border-bottom:0}
 .wy-good{color:#35c46a;font-weight:700}
@@ -272,7 +272,7 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 /* ─── EDITOR DE STATS A MANO ─── */
 .stat-edit-fila{border:1px solid var(--linea);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--panel)}
 .stat-edit-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
-.stat-edit-head input{background:var(--negro);color:var(--verde);border:1px solid var(--linea);border-radius:6px;padding:5px 8px;font-size:14px}
+.stat-edit-head input{background:var(--negro);color:var(--celeste);border:1px solid var(--linea);border-radius:6px;padding:5px 8px;font-size:14px}
 .stat-edit-del{color:var(--gris);font-size:16px;padding:2px 8px;border-radius:6px;flex:0 0 auto}
 .stat-edit-del:hover{color:var(--rojo);background:rgba(232,87,87,.1)}
 .stat-edit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
@@ -280,7 +280,7 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 .stat-edit-num{display:flex;flex-direction:column;gap:3px}
 .stat-edit-num span{font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:.06em}
 .stat-edit-num input{background:var(--negro);color:var(--blanco);border:1px solid var(--linea);border-radius:6px;padding:6px 8px;font-size:15px;width:100%}
-.stat-edit-num input:focus{border-color:var(--verde);outline:none}
+.stat-edit-num input:focus{border-color:var(--celeste);outline:none}
 .stat-edit-arq{font-size:11px;color:var(--gris);margin:2px 0 8px}
 
 /* ─── CANCHA ─── */
@@ -288,8 +288,8 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 .pitch-svg{width:170px;max-width:60%;height:auto}
 .pitch-line{stroke:rgba(255,255,255,.30);stroke-width:1.4;fill:none}
 .pitch-bg{fill:#123a20}
-.pitch-dot{fill:var(--verde);opacity:.5}
-.pitch-dot.primary{fill:var(--verde);opacity:1;stroke:#fff;stroke-width:1.5}
+.pitch-dot{fill:var(--celeste);opacity:.5}
+.pitch-dot.primary{fill:var(--celeste);opacity:1;stroke:#fff;stroke-width:1.5}
 .pitch-lbl{font-size:7px;fill:#fff;font-weight:700;text-anchor:middle;font-family:'Barlow Condensed',sans-serif}
 
 /* ─── ESTADÍSTICAS EN LA FICHA ─── */
@@ -298,35 +298,35 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 .stats-topfila .tabla-col{flex:1 1 320px;min-width:280px}
 .stats-selector{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .stats-selector .stats-temp-lbl{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--verde);
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--celeste);
   font-size:22px;letter-spacing:.04em;
 }
 .stats-select{
-  background:linear-gradient(135deg,var(--verde),var(--verde-osc));
+  background:linear-gradient(135deg,var(--celeste),var(--celeste-osc));
   color:#04202f;border:0;border-radius:999px;
   padding:11px 40px 11px 18px;font-size:19px;font-weight:800;
   font-family:'Barlow Condensed',sans-serif;letter-spacing:.05em;text-transform:uppercase;
-  cursor:pointer;box-shadow:0 6px 20px rgba(52,211,153,.4);
+  cursor:pointer;box-shadow:0 6px 20px rgba(87,184,232,.4);
   appearance:none;-webkit-appearance:none;-moz-appearance:none;
-  background-image:linear-gradient(135deg,var(--verde),var(--verde-osc)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2304202f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-image:linear-gradient(135deg,var(--celeste),var(--celeste-osc)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2304202f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat:no-repeat,no-repeat;background-position:center,right 15px center;
   transition:transform .15s,box-shadow .15s;
 }
-.stats-select:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(52,211,153,.55)}
+.stats-select:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(87,184,232,.55)}
 .stats-select:focus{outline:2px solid var(--blanco);outline-offset:2px}
 .stats-select option{background:var(--panel);color:var(--blanco);font-weight:600;text-transform:none}
 .stats-ligas{font-size:14px;color:var(--gris);margin-bottom:14px}
 .stat-item{margin-bottom:16px}
 .stat-item .stat-cab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .stat-item .stat-nombre{font-size:16px;font-weight:500;color:var(--blanco)}
-.stat-item .stat-valor{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;color:var(--verde)}
+.stat-item .stat-valor{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;color:var(--celeste)}
 .stat-barra{height:8px;background:var(--panel);border-radius:99px;overflow:hidden;border:1px solid var(--linea)}
-.stat-barra span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--verde-osc),var(--verde))}
+.stat-barra span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--celeste-osc),var(--celeste))}
 .stat-barra span.bajo{background:linear-gradient(90deg,#8a3030,var(--rojo))}
 .stat-simple{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--linea)}
 .stat-simple:last-child{border-bottom:none}
 .stat-simple .stat-nombre{font-size:16px;color:var(--blanco)}
-.stat-simple .stat-valor{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;color:var(--verde)}
+.stat-simple .stat-valor{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;color:var(--celeste)}
 .stats-pos-lbl{font-size:13px;color:var(--gris);text-align:center;margin-top:-8px}
 .stats-pos-lbl b{color:var(--blanco)}
 
@@ -356,7 +356,7 @@ header .fila-header{display:flex;align-items:center;gap:10px}
   width:100%;background:var(--panel);border:1px solid var(--linea);border-radius:10px;
   color:var(--blanco);padding:12px 14px;outline:none;transition:border-color .15s;
 }
-.campo input:focus,.campo textarea:focus{border-color:var(--verde)}
+.campo input:focus,.campo textarea:focus{border-color:var(--celeste)}
 .campo textarea{resize:vertical;min-height:90px;line-height:1.5}
 .campo .ayuda{color:var(--gris);font-size:13px;margin-top:5px;line-height:1.4}
 .posiciones-grid{display:flex;flex-wrap:wrap;gap:8px}
@@ -366,7 +366,7 @@ header .fila-header{display:flex;align-items:center;gap:10px}
   border:1px solid var(--linea);color:var(--gris);
   padding:8px 14px;border-radius:999px;transition:all .15s;
 }
-.pos-toggle.activo{background:rgba(52,211,153,.15);border-color:var(--verde);color:var(--verde)}
+.pos-toggle.activo{background:rgba(87,184,232,.15);border-color:var(--celeste);color:var(--celeste)}
 .foto-preview{
   width:110px;height:137px;border-radius:10px;background:var(--panel);
   border:1px dashed var(--linea);object-fit:cover;object-position:top center;
@@ -379,7 +379,7 @@ header .fila-header{display:flex;align-items:center;gap:10px}
   padding:13px 26px;border-radius:999px;transition:transform .15s,opacity .15s;
 }
 .btn:active{transform:scale(.96)}
-.btn-primario{background:var(--verde);color:var(--negro)}
+.btn-primario{background:var(--celeste);color:var(--negro)}
 .btn-secundario{border:1px solid var(--linea);color:var(--gris)}
 .btn-peligro{background:rgba(232,87,87,.12);border:1px solid rgba(232,87,87,.4);color:var(--rojo)}
 .btn:disabled{opacity:.5;cursor:wait}
@@ -396,7 +396,7 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 .admin-item .mini-sin{display:flex;align-items:center;justify-content:center;color:var(--linea)}
 .admin-item .nombre{flex:1;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:18px;letter-spacing:.03em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .admin-item button{padding:8px 10px;border-radius:8px;font-size:17px}
-.admin-item .editar{color:var(--verde)}
+.admin-item .editar{color:var(--celeste)}
 .admin-item .borrar{color:var(--rojo)}
 .barra-admin{
   display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -404,7 +404,7 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 }
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--panel);border:1px solid var(--verde);color:var(--blanco);
+  background:var(--panel);border:1px solid var(--celeste);color:var(--blanco);
   padding:13px 24px;border-radius:999px;font-size:15px;z-index:120;
   transition:transform .3s cubic-bezier(.2,.9,.3,1);white-space:nowrap;
   box-shadow:0 10px 30px rgba(0,0,0,.5);
@@ -417,16 +417,15 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 
 <!-- SPLASH -->
 <div id="splash">
-  <img class="logo-asf logo-asf--splash" src="logo-asf-white.webp" alt="ASF Agency">
-  <div class="lema">Perfiles · Trayectoria · Videos</div>
+  <img class="logo-splash" src="logo_web.png" alt="VIDEOSJUGADORES · Football Content">
   <div class="linea-cancha"></div>
   <button class="btn-entrar" onclick="entrar()">Jugadores</button>
 </div>
 
 <!-- HEADER -->
 <header>
-  <a href="#" onclick="irInicio(event)" aria-label="ASF Agency — inicio">
-    <img class="logo-asf logo-asf--header" src="logo-asf-white.webp" alt="ASF Agency">
+  <a href="#" onclick="irInicio(event)">
+    <div class="wordmark"><span class="wm-videos">VIDEOS</span><span class="wm-jugadores">JUGADORES</span></div>
   </a>
   <div class="fila-header">
     <button class="btn-idioma" id="btn-idioma" onclick="setIdioma(idioma==='es'?'en':'es')" aria-label="Idioma / Language">ES / EN</button>
@@ -566,14 +565,14 @@ header .fila-header{display:flex;align-items:center;gap:10px}
 /* ================= CONFIG ================= */
 const SUPABASE_URL = 'https://epvgqigrcyooavgskmzc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_-m_OmQzyG290M3pOaPCd8Q_e58eq4cT';
-const EMPRESA = 'asf';
-const ADMIN_PASS = 'asf2026';
+const EMPRESA = 'videosjugadores';
+const ADMIN_PASS = 'videos2026';
 const POSICIONES = ['Arquero','Defensa central','Lateral derecho','Lateral izquierdo','Volante defensivo','Volante mixto','Volante ofensivo','Extremo derecho','Extremo izquierdo','Delantero centro'];
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* ================= IDIOMA ================= */
-let idioma = localStorage.getItem('asf_idioma') || 'es';
+let idioma = localStorage.getItem('vj_idioma') || 'es';
 const T = {
   es: {
     jugadores:'Jugadores', buscar:'Buscar jugador…', volver:'← Volver a jugadores',
@@ -617,7 +616,7 @@ const traducirPos = p => (idioma === 'en' && POS_EN[p]) ? POS_EN[p] : p;
 
 function setIdioma(lang){
   idioma = lang;
-  localStorage.setItem('asf_idioma', lang);
+  localStorage.setItem('vj_idioma', lang);
   document.documentElement.lang = lang;
   actualizarUIIdioma();
   // re-render de la vista activa
@@ -646,7 +645,7 @@ let adminActivo = false;
 /* ================= NAVEGACIÓN ================= */
 function entrar(){
   document.getElementById('splash').classList.add('oculto');
-  sessionStorage.setItem('asf_entro','1');
+  sessionStorage.setItem('vj_entro','1');
 }
 function irInicio(e){
   if(e) e.preventDefault();
@@ -776,7 +775,7 @@ function renderFicha(j){
   const videos = [j.video, j.video2, j.video3, j.video4].map(vimeoEmbed).filter(Boolean);
   const tray = (j.trayectoria || '').split('\n').map(l=>l.trim()).filter(Boolean);
   const urlCompartir = location.origin + '/jugador/' + j.id;
-  const textoWsp = encodeURIComponent('Mirá el perfil de ' + j.nombre + ' en ASF Agency: ' + urlCompartir);
+  const textoWsp = encodeURIComponent('Mirá el perfil de ' + j.nombre + ' en VIDEOSJUGADORES: ' + urlCompartir);
   const bioTexto = (idioma === 'en' && j.bio_en) ? j.bio_en : j.bio;
 
   document.getElementById('vista-ficha').innerHTML = `
@@ -921,17 +920,17 @@ async function descargarPDF(id){
     const doc = new jsPDF({unit:'mm', format:'a4'});
     const W = 210, H = 297, MX = 16;
     const NEGRO = [7,9,12], PANEL = [20,26,34], LINEA = [35,44,56];
-    const BLANCO = [244,246,248], GRIS = [139,151,165], VERDE = [52,211,153];
+    const BLANCO = [244,246,248], GRIS = [139,151,165], CELESTE = [87,184,232];
 
     // Fondo
     doc.setFillColor(...NEGRO); doc.rect(0,0,W,H,'F');
 
     // Header con wordmark
-    doc.setFillColor(...BLANCO); doc.rect(MX, 14, 20, 9, 'F');
+    doc.setFillColor(...BLANCO); doc.rect(MX, 14, 34, 9, 'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(13);
-    doc.setTextColor(...NEGRO); doc.text('ASF', MX+2.5, 20.5);
-    doc.setTextColor(...BLANCO); doc.text('AGENCY', MX+22.5, 20.5);
-    doc.setDrawColor(...VERDE); doc.setLineWidth(0.8);
+    doc.setTextColor(...NEGRO); doc.text('VIDEOS', MX+2.5, 20.5);
+    doc.setTextColor(...BLANCO); doc.text('JUGADORES', MX+36.5, 20.5);
+    doc.setDrawColor(...CELESTE); doc.setLineWidth(0.8);
     doc.line(MX, 27, W-MX, 27);
 
     let y = 38;
@@ -955,7 +954,7 @@ async function descargarPDF(id){
     // Posiciones
     const pos = posiciones(j);
     if(pos.length){
-      doc.setFontSize(10); doc.setTextColor(...VERDE);
+      doc.setFontSize(10); doc.setTextColor(...CELESTE);
       doc.text(pos.join('  ·  ').toUpperCase(), xInfo, yi);
       yi += 8;
     }
@@ -996,7 +995,7 @@ async function descargarPDF(id){
         const partes = l.split('|');
         const anio = partes.length > 1 ? partes[0].trim() : '';
         const club = partes.length > 1 ? partes.slice(1).join('|').trim() : l;
-        doc.setFont('helvetica','bold'); doc.setTextColor(...VERDE);
+        doc.setFont('helvetica','bold'); doc.setTextColor(...CELESTE);
         doc.text(anio, MX, y);
         doc.setFont('helvetica','normal'); doc.setTextColor(...BLANCO);
         doc.text(club, anio ? MX + 34 : MX, y);
@@ -1015,7 +1014,7 @@ async function descargarPDF(id){
       videos.forEach((v,i)=>{
         if(y > H - 20){ doc.addPage(); doc.setFillColor(...NEGRO); doc.rect(0,0,W,H,'F'); y = 24; }
         const link = linkPublico(v);
-        doc.setTextColor(...VERDE);
+        doc.setTextColor(...CELESTE);
         doc.textWithLink('▶ Video ' + (i+1) + ':  ' + link, MX, y, {url: link});
         y += 7;
       });
@@ -1029,11 +1028,11 @@ async function descargarPDF(id){
     doc.line(MX, y, W - MX, y); y += 7;
     doc.setFontSize(9.5); doc.setTextColor(...GRIS);
     doc.text('Perfil completo online:', MX, y);
-    doc.setTextColor(...VERDE);
+    doc.setTextColor(...CELESTE);
     doc.textWithLink(urlPerfil, MX + 36, y, {url: urlPerfil});
 
     const nombreArchivo = (j.nombre || 'jugador').trim().replace(/\s+/g,'-').replace(/[^\w\-áéíóúñÁÉÍÓÚÑ]/g,'');
-    doc.save(nombreArchivo + '-ASF-AGENCY.pdf');
+    doc.save(nombreArchivo + '-VIDEOSJUGADORES.pdf');
     toast('PDF descargado ✔');
   }catch(e){
     console.error(e);
@@ -1468,7 +1467,7 @@ function toast(msg){
 window.addEventListener('hashchange', procesarHash);
 document.addEventListener('DOMContentLoaded', () => {
   // Si entra con link directo a un jugador (WhatsApp), saltamos el splash
-  if(location.hash.startsWith('#jugador-') || location.pathname.startsWith('/jugador/') || sessionStorage.getItem('asf_entro')){
+  if(location.hash.startsWith('#jugador-') || location.pathname.startsWith('/jugador/') || sessionStorage.getItem('vj_entro')){
     document.getElementById('splash').classList.add('oculto');
   }
   document.documentElement.lang = idioma;
